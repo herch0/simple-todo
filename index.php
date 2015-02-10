@@ -15,7 +15,7 @@ and open the template in the editor.
       [draggable] {
         user-select: none;
       }
-      .item {
+      .task {
         height: 30px;
         line-height: 30px;
         width: 150px;
@@ -25,7 +25,7 @@ and open the template in the editor.
         text-align: center;
         cursor: move;
       }
-      .item.over {
+      .task.over {
         border: 1px dashed #000;
       }
       #form_task label {
@@ -66,16 +66,7 @@ and open the template in the editor.
                 <div class="item" draggable="true">Item3</div>-->
         </div> 
     </div>
+    <script src="js/app.js"></script>
     <script src="js/dnd.js"></script>
-    <script>
-      function newTask() {
-        console.log('new task');
-      }
-      
-      window.onload = function() {
-        var btnNewTask = document.getElementById('btn_new_task');
-        btnNewTask.addEventListener('click', newTask, false);
-      }
-    </script>
   </body>
 </html>

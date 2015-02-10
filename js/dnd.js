@@ -39,18 +39,9 @@ function handleDrop(e) {
 
 function handleDragEnd(e) {
   // this/e.target is the source node.
+  var items = document.querySelectorAll('#tasks .task');
   this.style.opacity = '1';
   [].forEach.call(items, function (item) {
     item.classList.remove('over');
   });
 }
-
-var items = document.querySelectorAll('#items .item');
-[].forEach.call(items, function (item) {
-  item.addEventListener('dragstart', handleDragStart, false);
-  item.addEventListener('dragenter', handleDragEnter, false);
-  item.addEventListener('dragover', handleDragOver, false);
-  item.addEventListener('dragleave', handleDragLeave, false);
-  item.addEventListener('drop', handleDrop, false);
-  item.addEventListener('dragend', handleDragEnd, false);
-})
