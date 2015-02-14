@@ -17,13 +17,17 @@ function init() {
   reloadTasks();
 }
 
-
-function Task(title, priority, start, end) {
+function Task(element, title, priority, start, end) {
   this.title = title;
   this.priority = priority;
   this.start = start;
   this.end = end;
+  element.addEventListener('change', this, false);
 }
+
+Task.prototype.handleEvent(function(event) {
+  console.log(event.type)
+});
 
 function newTask() {
   var title = document.getElementById("title").value;
@@ -41,10 +45,14 @@ function save() {
 
 function reloadTasks() {
   var html = '';
+  tasks.sort(function(t1, t2) {
+    return t1.priority - t2.priority;
+  });
   for (var i = 0; i < tasks.length; i++) {
     var task = tasks[i];
     html += '<div class="task" draggable=true>' + task.title + '</div>';
   }
+  console.log(tasks);
 
   document.getElementById("tasks").innerHTML = html;
   //reattach dnd events

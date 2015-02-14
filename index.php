@@ -18,7 +18,7 @@ and open the template in the editor.
       .task {
         height: 30px;
         line-height: 30px;
-        width: 150px;
+        width: auto;
         border: 1px solid #ccc;
         margin-bottom: 5px;
         border-radius: 5px;
@@ -27,6 +27,9 @@ and open the template in the editor.
       }
       .task.over {
         border: 1px dashed #000;
+      }
+      #form_task {
+        margin-bottom: 25px;
       }
       #form_task label {
         display: inline-block;
