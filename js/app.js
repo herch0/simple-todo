@@ -17,17 +17,22 @@ function init() {
   reloadTasks();
 }
 
-function Task(element, title, priority, start, end) {
+function Task(title, priority, start, end) {
   this.title = title;
   this.priority = priority;
   this.start = start;
   this.end = end;
-  element.addEventListener('change', this, false);
+  var div = document.createElement('div');
+  div.setAttribute('draggable', true);
+  div.className = 'task';
+  div.innerHTML = title;
+  div.addEventListener('change', this, false);
+  this.domElement = div;
 }
 
-Task.prototype.handleEvent(function(event) {
-  console.log(event.type)
-});
+Task.prototype.handleEvent = function (event) {
+  console.log(event.type);
+};
 
 function newTask() {
   var title = document.getElementById("title").value;
@@ -40,21 +45,21 @@ function newTask() {
 
 function save() {
   var data = JSON.stringify(tasks);
+  console.log(data);
   store.setItem('tasks', data);
 }
 
 function reloadTasks() {
-  var html = '';
-  tasks.sort(function(t1, t2) {
+  var docFragment = document.createDocumentFragment();
+  tasks.sort(function (t1, t2) {
     return t1.priority - t2.priority;
   });
   for (var i = 0; i < tasks.length; i++) {
     var task = tasks[i];
-    html += '<div class="task" draggable=true>' + task.title + '</div>';
+    docFragment.appendChild(task.domElement);
   }
-  console.log(tasks);
 
-  document.getElementById("tasks").innerHTML = html;
+  document.getElementById("tasks").appendChild(docFragment);
   //reattach dnd events
   var items = document.querySelectorAll('#tasks .task');
   [].forEach.call(items, function (item) {
