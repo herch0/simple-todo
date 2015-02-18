@@ -31,7 +31,7 @@ function handleDrop(e) {
     if (dragSrcEl != this) {
         // Set the source column's HTML to the HTML of the column we dropped on.
         dragSrcEl.innerHTML = this.innerHTML;
-        dragSrcEl.dispatchEvent(new Event('change'));
+//        dragSrcEl.dispatchEvent(new CustomEvent('change', {index: }));
         this.innerHTML = e.dataTransfer.getData('text/html');
     }
 
