@@ -6,7 +6,7 @@ function handleDragStart(e) {
     dragSrcEl = this;
 
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
+    e.dataTransfer.setData('text/plain', this.dataset.index);
 }
 
 function handleDragOver(e) {
@@ -30,9 +30,14 @@ function handleDrop(e) {
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
         // Set the source column's HTML to the HTML of the column we dropped on.
-        dragSrcEl.innerHTML = this.innerHTML;
+//        dragSrcEl.innerHTML = this.innerHTML;
 //        dragSrcEl.dispatchEvent(new CustomEvent('change', {index: }));
-        this.innerHTML = e.dataTransfer.getData('text/html');
+//        this.innerHTML = e.dataTransfer.getData('text/html');
+        var idx = e.dataTransfer.getData('text/plain');
+        var otherIndex = this.dataset.index;
+        this.dataset.index = idx;
+        dragSrcEl.dataset.index = otherIndex;
+        dragSrcEl.dispatchEvent(new Event('change'));
     }
 
     return false;

@@ -2,6 +2,8 @@
 var store = window.localStorage;
 var tasks = [];
 
+//window.localStorage.clear();
+
 function init() {
   var btnNewTask = document.getElementById('btn_new_task');
   btnNewTask.addEventListener('click', newTask, false);
@@ -11,21 +13,21 @@ function init() {
     itemsJson = JSON.parse(itemsJson);
     for (var i = 0; i < itemsJson.length; i++) {
       var item = itemsJson[i];
-      tasks.push(new Task(item.title, item.priority, item.start, item.end));
+      tasks.push(new Task(item.title, item.priority, item.start, item.end, item.index));
     }
   }
   reloadTasks();
 }
 
-function Task(title, priority, start, end) {
+function Task(title, priority, start, end, index) {
   this.title = title;
   this.priority = priority;
   this.start = start;
   this.end = end;
-  this.index = 0;
+  this.index = (index ? index : 0);
   var div = document.createElement('div');
   div.setAttribute('draggable', true);
-  div.dataset.index = 0;
+  div.dataset.index = this.index;
   div.className = 'task';
   div.innerHTML = title;
   div.addEventListener('change', this, false);
@@ -35,15 +37,16 @@ function Task(title, priority, start, end) {
 Task.prototype.handleEvent = function (event) {
   console.log(event.type);
   console.log(this.title);
+  reloadTasks();
 };
 
-function newTask() {x
+function newTask() {
   var title = document.getElementById("title").value;
   var priority = document.getElementById("priority").value;
   tasks.push(new Task(title, priority, new Date(), null));
   console.log(tasks);
   reloadTasks();
-  save();
+//  save();
 }
 
 function save() {
@@ -56,7 +59,11 @@ function reloadTasks() {
   var docFragment = document.createDocumentFragment();
   tasks.sort(function (t1, t2) {
     if (t1.priority == t2.priority) {
-      return t1.title < t2.title ? -1 : 1;
+      if (t1.index == t2.index) {
+        return t1.title < t2.title ? -1 : 1;
+      } else {
+        return t2.index - t1.index;
+      }
     }
     return t1.priority - t2.priority;
   });
@@ -66,6 +73,7 @@ function reloadTasks() {
     task.domElement.dataset.index = i;
     docFragment.appendChild(task.domElement);
   }
+  save();
 
   document.getElementById("tasks").appendChild(docFragment);
   //reattach dnd events
