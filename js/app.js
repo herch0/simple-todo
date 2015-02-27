@@ -4,19 +4,28 @@ var tasks = [];
 
 //window.localStorage.clear();
 
+//var colors = [
+//  {'text': '#D8000C', 'bg': "#FFBABA"},
+//  {'text': '#9F6000', 'bg': "#FEEFB3"},
+//  {'text': '#B3A61E', 'bg': "#FFFE91"},
+//];
+
 function init() {
   var btnNewTask = document.getElementById('btn_new_task');
   btnNewTask.addEventListener('click', newTask, false);
 
+//get stored tasks
   var itemsJson = store.getItem('tasks');
   if (itemsJson) {
     itemsJson = JSON.parse(itemsJson);
+    //add retrieved tasks to the global array tasks
     for (var i = 0; i < itemsJson.length; i++) {
       var item = itemsJson[i];
       tasks.push(new Task(item.title, item.priority, item.start, item.end, item.index));
     }
   }
-  reloadTasks();
+  //display the tasks in the page
+  displayTasks();
 }
 
 function Task(title, priority, start, end, index) {
@@ -28,25 +37,31 @@ function Task(title, priority, start, end, index) {
   var div = document.createElement('div');
   div.setAttribute('draggable', true);
   div.dataset.index = this.index;
-  div.className = 'task';
+  div.dataset.priority = this.priority;
+  div.classList.add('task');
+  div.classList.add('priority-'+this.priority);
   div.innerHTML = title;
   div.addEventListener('change', this, false);
   this.domElement = div;
 }
 
 Task.prototype.handleEvent = function (event) {
-  console.log(event.type);
-  console.log(this.title);
-  reloadTasks();
+  if (event.type == 'change') {
+    console.log(event.detail.priority);
+    this.priority = event.detail.priority;
+    save();
+    displayTasks();
+  }
 };
 
 function newTask() {
   var title = document.getElementById("title").value;
   var priority = document.getElementById("priority").value;
-  tasks.push(new Task(title, priority, new Date(), null));
-  console.log(tasks);
-  reloadTasks();
-//  save();
+  document.getElementById("title").value = "";
+  document.getElementById("priority").value = 1;
+  tasks.push(new Task(title, priority, new Date(), null, tasks.length));
+  displayTasks();
+  save();
 }
 
 function save() {
@@ -55,26 +70,19 @@ function save() {
   store.setItem('tasks', data);
 }
 
-function reloadTasks() {
+function displayTasks() {
   var docFragment = document.createDocumentFragment();
   tasks.sort(function (t1, t2) {
     if (t1.priority == t2.priority) {
-      if (t1.index == t2.index) {
-        return t1.title < t2.title ? -1 : 1;
-      } else {
-        return t2.index - t1.index;
-      }
+      return t1.title < t2.title ? -1 : 1;
     }
     return t1.priority - t2.priority;
   });
   for (var i = 0; i < tasks.length; i++) {
     var task = tasks[i];
-    task.index = i;
-    task.domElement.dataset.index = i;
     docFragment.appendChild(task.domElement);
   }
-  save();
-
+  document.getElementById("tasks").innerHTML = '';
   document.getElementById("tasks").appendChild(docFragment);
   //reattach dnd events
   var items = document.querySelectorAll('#tasks .task');

@@ -25,6 +25,21 @@ and open the template in the editor.
         text-align: center;
         cursor: move;
       }
+      .priority-1 { 
+        color: #FFF;
+        border: 1px solid #D8000C;
+        background-color: #FC8686;
+      }
+      .priority-2 { 
+        color : #9F6000;
+        border: 1px solid #9F6000;
+        background-color: #FEEFB3 
+      }
+      .priority-3 { 
+        color : #C58547;
+        border: 1px solid #C58547;
+        background-color: #FFF 
+      }
       .task.over {
         border: 1px dashed #000;
       }
@@ -52,22 +67,22 @@ and open the template in the editor.
     <div class="container">
       <div class="row">
         <div id="form_task" class="div_row">
-            <label>Title</label><input type="text" id="title">
-            <label>Priority</label>
-            <select id="priority" >
-              <option value="1">High</option>
-              <option value="2">Normal</option>
-              <option value="3">Low</option>
-            </select>
-            <button class="button" id="btn_new_task"><i class="fa fa-plus"></i> Create task</button>
+          <label>Title</label><input type="text" id="title">
+          <label>Priority</label>
+          <select id="priority" >
+            <option value="1">High</option>
+            <option value="2">Normal</option>
+            <option value="3">Low</option>
+          </select>
+          <button class="button" id="btn_new_task"><i class="fa fa-plus"></i> Create task</button>
         </div>
       </div>
-      
-        <div id="tasks">
-          <!--      <div class="item" draggable="true">Item1</div>
-                <div class="item" draggable="true">Item2</div>
-                <div class="item" draggable="true">Item3</div>-->
-        </div> 
+
+      <div id="tasks">
+        <!--      <div class="item" draggable="true">Item1</div>
+              <div class="item" draggable="true">Item2</div>
+              <div class="item" draggable="true">Item3</div>-->
+      </div> 
     </div>
     <script src="js/app.js"></script>
     <script src="js/dnd.js"></script>

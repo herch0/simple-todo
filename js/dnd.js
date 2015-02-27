@@ -6,7 +6,7 @@ function handleDragStart(e) {
     dragSrcEl = this;
 
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', this.dataset.index);
+    e.dataTransfer.setData('text/plain', this.dataset.priority);
 }
 
 function handleDragOver(e) {
@@ -29,15 +29,12 @@ function handleDrop(e) {
 
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
-        // Set the source column's HTML to the HTML of the column we dropped on.
-//        dragSrcEl.innerHTML = this.innerHTML;
-//        dragSrcEl.dispatchEvent(new CustomEvent('change', {index: }));
-//        this.innerHTML = e.dataTransfer.getData('text/html');
-        var idx = e.dataTransfer.getData('text/plain');
-        var otherIndex = this.dataset.index;
-        this.dataset.index = idx;
-        dragSrcEl.dataset.index = otherIndex;
-        dragSrcEl.dispatchEvent(new Event('change'));
+        var priority = e.dataTransfer.getData('text/plain');
+        var otherPriority = this.dataset.priority;
+        this.dataset.priority = priority;
+        dragSrcEl.dataset.priority = otherPriority;
+        dragSrcEl.dispatchEvent(new CustomEvent('change', {'detail': {'priority': dragSrcEl.dataset.priority}}));
+        this.dispatchEvent(new CustomEvent('change', {'detail': {'priority': this.dataset.priority}}));
     }
 
     return false;
