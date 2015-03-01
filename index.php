@@ -78,11 +78,7 @@ and open the template in the editor.
         </div>
       </div>
 
-      <div id="tasks">
-        <!--      <div class="item" draggable="true">Item1</div>
-              <div class="item" draggable="true">Item2</div>
-              <div class="item" draggable="true">Item3</div>-->
-      </div> 
+      <div id="tasks"></div> 
     </div>
     <script src="js/app.js"></script>
     <script src="js/dnd.js"></script>

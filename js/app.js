@@ -4,12 +4,6 @@ var tasks = [];
 
 //window.localStorage.clear();
 
-//var colors = [
-//  {'text': '#D8000C', 'bg': "#FFBABA"},
-//  {'text': '#9F6000', 'bg': "#FEEFB3"},
-//  {'text': '#B3A61E', 'bg': "#FFFE91"},
-//];
-
 function init() {
   var btnNewTask = document.getElementById('btn_new_task');
   btnNewTask.addEventListener('click', newTask, false);
@@ -24,7 +18,7 @@ function init() {
       tasks.push(new Task(item.title, item.priority, item.start, item.end, item.index));
     }
   }
-  //display the tasks in the page
+//display the tasks in the page
   displayTasks();
 }
 
@@ -39,16 +33,32 @@ function Task(title, priority, start, end, index) {
   div.dataset.index = this.index;
   div.dataset.priority = this.priority;
   div.classList.add('task');
-  div.classList.add('priority-'+this.priority);
+  div.classList.add('priority-' + this.priority);
   div.innerHTML = title;
   div.addEventListener('change', this, false);
+  div.addEventListener('dblclick', function (event) {
+    event.target.contentEditable = true;
+    event.target.style.cursor = 'text';
+    event.target.focus();
+  });
+  div.addEventListener('blur', function (event) {
+    event.target.contentEditable = false;
+    event.target.style.cursor = 'move';
+    event.target.dispatchEvent(new Event('change'));
+  });
   this.domElement = div;
 }
 
 Task.prototype.handleEvent = function (event) {
   if (event.type == 'change') {
-    console.log(event.detail.priority);
-    this.priority = event.detail.priority;
+    if (event.detail) {
+      this.domElement.classList.remove('priority-' + this.priority);
+      this.priority = event.detail.priority;
+      this.domElement.classList.add('priority-' + this.priority);
+    }
+    if (this.title != this.domElement.innerHTML) {
+      this.title = this.domElement.innerHTML;
+    }
     save();
     displayTasks();
   }
@@ -66,7 +76,6 @@ function newTask() {
 
 function save() {
   var data = JSON.stringify(tasks);
-  console.log(data);
   store.setItem('tasks', data);
 }
 
