@@ -16,7 +16,7 @@ and open the template in the editor.
         user-select: none;
       }
       .task {
-        height: 30px;
+        min-height: 30px;
         line-height: 30px;
         width: auto;
         border: 1px solid #ccc;
@@ -24,6 +24,19 @@ and open the template in the editor.
         border-radius: 5px;
         text-align: center;
         cursor: move;
+      }
+      .task input[type=checkbox] {
+        float: left;
+        vertical-align: middle;
+      }
+      .task span.finishDate {
+        float: right;
+        min-width: 60px;
+        width: 60px;
+        font-size: .9em;
+        opacity: .8;
+        margin-right: 4px;
+        display: inline-block;
       }
       .priority-1 { 
         color: #FFF;

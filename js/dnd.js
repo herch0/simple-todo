@@ -33,8 +33,8 @@ function handleDrop(e) {
         var otherPriority = this.dataset.priority;
         this.dataset.priority = priority;
         dragSrcEl.dataset.priority = otherPriority;
-        dragSrcEl.dispatchEvent(new CustomEvent('change', {'detail': {'priority': dragSrcEl.dataset.priority}}));
-        this.dispatchEvent(new CustomEvent('change', {'detail': {'priority': this.dataset.priority}}));
+        dragSrcEl.dispatchEvent(new CustomEvent('priorityChange', {'detail': {'priority': dragSrcEl.dataset.priority}}));
+        this.dispatchEvent(new CustomEvent('priorityChange', {'detail': {'priority': this.dataset.priority}}));
     }
 
     return false;
