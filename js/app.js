@@ -2,9 +2,9 @@
 var store = window.localStorage;
 var tasks = [];
 
-var months = new Array("January", "February", "March",
-        "April", "May", "June", "July", "August", "September",
-        "October", "November", "December");
+var months = new Array("Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+        "Oct", "Nov", "Dec");
 
 //window.localStorage.clear();
 
@@ -50,8 +50,8 @@ function Task(title, priority, start, end, index) {
   div.classList.add('priority-' + this.priority);
   div.addEventListener('priorityChange', this, false);
   div.addEventListener('finished', this, false);
-  div.addEventListener('dblclick', taskDblClick);
-  div.addEventListener('blur', taskBlur);
+  div.addEventListener('change', this, false);
+  div.addEventListener('remove', this, false);
   var checkFinished = document.createElement('input');
   checkFinished.setAttribute('type', 'checkbox');
   checkFinished.addEventListener('change', checkFinishedClick);
@@ -60,8 +60,13 @@ function Task(title, priority, start, end, index) {
   } else {
     checkFinished.checked = false;
   }
-  div.appendChild(checkFinished);
+  var spanCheckFinished = document.createElement('span');
+  spanCheckFinished.appendChild(checkFinished);
+  div.appendChild(spanCheckFinished);
   var spanTitle = document.createElement('span');
+  spanTitle.addEventListener('dblclick', taskDblClick);
+  spanTitle.addEventListener('blur', taskBlur);
+  spanTitle.className = 'title';
   spanTitle.innerHTML = title;
   div.appendChild(spanTitle);
   var finshDateSpan = document.createElement('span');
@@ -70,6 +75,12 @@ function Task(title, priority, start, end, index) {
     finshDateSpan.innerHTML = format_date(this.end);
   }
   div.appendChild(finshDateSpan);
+  
+  var spanRemove = document.createElement('a');
+  spanRemove.addEventListener('click', removeTaskClick);
+  spanRemove.className = 'close';
+  spanRemove.innerHTML = '<i class="fa fa-close"></i>';
+  div.appendChild(spanRemove);
   this.domElement = div;
 }
 
@@ -82,10 +93,6 @@ Task.prototype.handleEvent = function (event) {
         this.domElement.classList.add('priority-' + this.priority);
       }
     }
-    //innerHTML of span child
-//    if (this.title != this.domElement.innerHTML) {
-//      this.title = this.domElement.innerHTML;
-//    }
     displayTasks();
   } else if (event.type == 'finished') {
     this.end = event.detail.finishDate;
@@ -95,9 +102,22 @@ Task.prototype.handleEvent = function (event) {
     } else {
       this.domElement.childNodes[2].innerHTML = '';
     }
+  } else if (event.type == 'change') {// 2nd child is title span
+    if (this.title != this.domElement.childNodes[1].innerHTML) {
+      this.title = this.domElement.childNodes[1].innerHTML;
+    }
+  } else if (event.type == 'remove') {
+    var i = tasks.indexOf(this);
+    tasks.splice(i, 1);
+    displayTasks();    
   }
   save();
 };
+
+function removeTaskClick(event) {
+  //first parent is <a>, second is the task div
+  event.target.parentNode.parentNode.dispatchEvent(new Event('remove'));
+}
 
 function checkFinishedClick(event) {
   var check = event.target;
@@ -112,7 +132,6 @@ function checkFinishedClick(event) {
 function taskDblClick(event) {
   event.target.contentEditable = true;
   event.target.style.cursor = 'text';
-  event.target.focus();
   //select the text inside the div
   var selection = window.getSelection();
   var range = document.createRange();
@@ -120,12 +139,15 @@ function taskDblClick(event) {
   range.setEnd(event.target.firstChild, event.target.firstChild.textContent.length);
   selection.addRange(range);
   //////////////////////////////////
+  event.target.focus();
 }
 
 function taskBlur(event) {
+  var selection = window.getSelection();
+  selection.removeAllRanges();
   event.target.contentEditable = false;
   event.target.style.cursor = 'move';
-  event.target.dispatchEvent(new Event('change'));
+  event.target.parentNode.dispatchEvent(new Event('change'));
 }
 
 function newTask() {

@@ -24,19 +24,32 @@ and open the template in the editor.
         border-radius: 5px;
         text-align: center;
         cursor: move;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .task .title {
+        display: inline-block;
+        flex-grow: 4;
+      }
+      .task .close {
+        color: #888;
+        cursor: pointer;
+        align-self: flex-start;
+      }
+      .task .close:hover {
+        opacity: .5;
       }
       .task input[type=checkbox] {
-        float: left;
-        vertical-align: middle;
+
       }
       .task span.finishDate {
-        float: right;
         min-width: 60px;
         width: 60px;
         font-size: .9em;
         opacity: .8;
         margin-right: 4px;
-        display: inline-block;
       }
       .priority-1 { 
         color: #FFF;

@@ -2,6 +2,5 @@
 + make div tasks editable
 + select the content of the task on double click
 + finished, show date finish
-double click on span, blur on div, problem contentEditable
-add delete button
++ add delete button
 group by date finish
